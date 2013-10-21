@@ -12,10 +12,13 @@ import numpy as np
 randn = np.random.randn
 
 df = pd.read_csv("C:\Users\lukas\Desktop\EnergyMix.csv", index_col=0)
-graph = df[0:4]
-#graph.plot(kind='bar')
+df.plot()
 
-#Beispieldaten statt Google Maps
+#Simplified graph
+#graph = df[0:4]
+#graph.plot()
+
+#Random example data instead of Google Maps
 gmaps = pd.DataFrame(randn(len(df.index),2), columns=('Lat','Long'), index=df.index)
 def geocode(addr):
     url = "http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" %   (urllib.quote(addr.replace(' ', '+')))
@@ -29,6 +32,6 @@ for row_index, row in df.iterrows():
     gmaps.loc[row_index, ['Long']] = res['lng']
     time.sleep(1)
 
-#Geokoordinaten and Dataframe anhängen
+#Append geodata to dataframe
 df = df.append(gmaps)
-df.to_csv("C:\Users\lukas\Desktop\EnergyMixGeo.csv")
+gmaps.to_csv("C:\Users\lukas\Desktop\EnergyMixGeo.csv")
