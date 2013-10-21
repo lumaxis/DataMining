@@ -25,13 +25,15 @@ def geocode(addr):
     data = urllib.urlopen(url).read()
     info = json.loads(data).get("results")[0].get("geometry").get("location")  
     return info
-    
+        
+df['Lat']= pd.Series(0.0, index=df.index)
+df['Long']= pd.Series(0.0, index=df.index)
+
 for row_index, row in df.iterrows():
     res = (geocode(str(row_index)))
-    gmaps.loc[row_index, ['Lat']] = res['lat']
-    gmaps.loc[row_index, ['Long']] = res['lng']
+    df.loc[row_index, ['Lat']] = res['lat']
+    df.loc[row_index, ['Long']] = res['lng']
     time.sleep(1)
 
 #Append geodata to dataframe
-df = df.append(gmaps)
-gmaps.to_csv("C:\Users\lukas\Desktop\EnergyMixGeo.csv")
+df.to_csv("C:\Users\lukas\Desktop\EnergyMixGeo.csv")
