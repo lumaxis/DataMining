@@ -1,0 +1,119 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title></title>
+    
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAQQRAsOk3uqvy3Hwwo4CclBTrVPfEE8Ms0qPwyRfPn-DOTlpaLBTvTHRCdf2V6KbzW7PZFYLT8wFD0A" type="text/javascript"></script>
+        <script type="text/javascript">
+        //<![CDATA[
+        function load() {
+            if (GBrowserIsCompatible()) {
+                
+            
+            function Point(lat,long,html,icon) {
+                  this.gpoint = new GMarker(new GLatLng(lat,long),icon);
+                  this.html = html;
+                  
+               }               
+               
+               
+               function Map(id,points,lat,long,zoom) {
+                  this.id = id;
+                  this.points = points;
+                  this.gmap = new GMap2(document.getElementById(this.id));
+                  this.gmap.setCenter(new GLatLng(lat, long), zoom);
+                  this.markerlist = markerlist;
+                  this.addmarker = addmarker;
+                  this.array2points = array2points;
+                   
+                  function markerlist(array) {
+                     for (var i in array) {
+                        this.addmarker(array[i]);
+                     }
+                  }
+                  
+                  function array2points(map_points) {            
+                      for (var i in map_points) {  
+                        points[i] = new Point(map_points[i][0],map_points[i][1],map_points[i][2],map_points[i][3]);         }
+                      return points;   
+                    }                  
+                  
+                  function addmarker(point) {
+                     if (point.html) {
+                       GEvent.addListener(point.gpoint, "click", function() { // change click to mouseover or other mouse action
+                           point.gpoint.openInfoWindowHtml(point.html);
+                        
+                       });
+                       
+                     }
+                     this.gmap.addOverlay(point.gpoint);  
+                  }
+                  this.points = array2points(this.points);
+                  this.markerlist(this.points);
+            }  
+                     
+                var icon = new GIcon(); 
+                icon.image = "";
+                icon.shadow = "";
+                icon.iconSize = new GSize(12, 20);
+                icon.shadowSize = new GSize(22, 20);
+                icon.iconAnchor = new GPoint(6, 20);
+                icon.infoWindowAnchor = new GPoint(5, 1);
+         
+                var iconGreen = new GIcon(); 
+                iconGreen.image = "http://labs.google.com/ridefinder/images/mm_20_green.png";
+                iconGreen.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+                iconGreen.iconSize = new GSize(12, 20);
+                iconGreen.shadowSize = new GSize(22, 20);
+                iconGreen.iconAnchor = new GPoint(6, 20);
+                iconGreen.infoWindowAnchor = new GPoint(5, 1);
+         
+                var iconYellow = new GIcon(); 
+                iconYellow.image = "http://labs.google.com/ridefinder/images/mm_20_yellow.png";
+                iconYellow.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+                iconYellow.iconSize = new GSize(12, 20);
+                iconYellow.shadowSize = new GSize(22, 20);
+                iconYellow.iconAnchor = new GPoint(6, 20);
+                iconYellow.infoWindowAnchor = new GPoint(5, 1);
+         
+                var iconBlue = new GIcon(); 
+                iconBlue.image = "http://labs.google.com/ridefinder/images/mm_20_blue.png";
+                iconBlue.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+                iconBlue.iconSize = new GSize(12, 20);
+                iconBlue.shadowSize = new GSize(22, 20);
+                iconBlue.iconAnchor = new GPoint(6, 20);
+                iconBlue.infoWindowAnchor = new GPoint(5, 1);
+         
+                var iconRed = new GIcon(); 
+                iconRed.image = "http://labs.google.com/ridefinder/images/mm_20_red.png";
+                iconRed.shadow = "http://labs.google.com/ridefinder/images/mm_20_shadow.png";
+                iconRed.iconSize = new GSize(12, 20);
+                iconRed.shadowSize = new GSize(22, 20);
+                iconRed.iconAnchor = new GPoint(6, 20);
+                iconRed.infoWindowAnchor = new GPoint(5, 1);
+        
+                    map_points = [[37.090240000000001, -95.712890999999999, 'Oil: 842.9<br>Gas: 588.7<br>Coal: 498.0<br>Nuclear: 190.2<br>Hydro: 62.2<br>Total2009: 2182.0<br>CO2Emm: 5941.9', iconRed], [56.130366000000002, -106.34677099999999, 'Oil: 97.0<br>Gas: 85.2<br>Coal: 26.5<br>Nuclear: 20.3<br>Hydro: 90.2<br>Total2009: 319.2<br>CO2Emm: 602.7', iconYellow], [23.634501, -102.552784, 'Oil: 85.6<br>Gas: 62.7<br>Coal: 6.8<br>Nuclear: 2.2<br>Hydro: 6.0<br>Total2009: 163.2<br>CO2Emm: 436.8', iconBlue], [-38.416097000000001, -63.616671999999994, 'Oil: 22.3<br>Gas: 38.8<br>Coal: 1.1<br>Nuclear: 1.8<br>Hydro: 9.2<br>Total2009: 73.3<br>CO2Emm: 164.2', iconBlue], [-14.235004, -51.925280000000001, 'Oil: 104.3<br>Gas: 18.3<br>Coal: 11.7<br>Nuclear: 2.9<br>Hydro: 88.5<br>Total2009: 225.7<br>CO2Emm: 409.4', iconYellow], [-35.675146999999996, -71.542968999999999, 'Oil: 15.4<br>Gas: 3.0<br>Coal: 4.1<br>Nuclear: 0.0<br>Hydro: 5.6<br>Total2009: 28.1<br>CO2Emm: 70.3', iconYellow], [4.5708679999999999, -74.297332999999995, 'Oil: 8.8<br>Gas: 7.8<br>Coal: 3.1<br>Nuclear: 0.0<br>Hydro: 9.3<br>Total2009: 29.0<br>CO2Emm: 57.9', iconYellow], [-1.8312389999999998, -78.183406000000005, 'Oil: 9.9<br>Gas: 0.4<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 2.1<br>Total2009: 12.4<br>CO2Emm: 31.3', iconYellow], [-9.1899669999999993, -75.015152, 'Oil: 8.5<br>Gas: 3.1<br>Coal: 0.5<br>Nuclear: 0.0<br>Hydro: 4.5<br>Total2009: 16.6<br>CO2Emm: 35.5', iconYellow], [6.4237500000000001, -66.589730000000003, 'Oil: 27.4<br>Gas: 26.8<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 19.5<br>Total2009: 73.6<br>CO2Emm: 147.0', iconYellow], [47.516230999999998, 14.550072, 'Oil: 13.0<br>Gas: 8.4<br>Coal: 2.3<br>Nuclear: 0.0<br>Hydro: 8.3<br>Total2009: 32.0<br>CO2Emm: 68.8', iconYellow], [40.143104999999998, 47.576927000000005, 'Oil: 2.8<br>Gas: 6.9<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.5<br>Total2009: 10.2<br>CO2Emm: 24.8', iconBlue], [53.709806999999998, 27.953389000000001, 'Oil: 9.3<br>Gas: 14.5<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 23.9<br>CO2Emm: 62.9', iconBlue], [50.503886999999999, 4.4699359999999997, 'Oil: 38.5<br>Gas: 15.6<br>Coal: 4.6<br>Nuclear: 10.7<br>Hydro: 0.1<br>Total2009: 69.4<br>CO2Emm: 172.8', iconRed], [42.733882999999999, 25.48583, 'Oil: 4.4<br>Gas: 2.2<br>Coal: 6.3<br>Nuclear: 3.5<br>Hydro: 0.9<br>Total2009: 17.4<br>CO2Emm: 43.7', iconRed], [49.817492000000001, 15.472961999999999, 'Oil: 9.7<br>Gas: 7.4<br>Coal: 15.8<br>Nuclear: 6.1<br>Hydro: 0.7<br>Total2009: 39.6<br>CO2Emm: 109.5', iconRed], [56.263919999999999, 9.5017849999999999, 'Oil: 8.2<br>Gas: 4.0<br>Coal: 4.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 16.1<br>CO2Emm: 50.3', iconBlue], [61.924109999999999, 25.748151, 'Oil: 9.9<br>Gas: 3.2<br>Coal: 3.7<br>Nuclear: 5.4<br>Hydro: 2.9<br>Total2009: 25.0<br>CO2Emm: 52.5', iconRed], [46.227637999999999, 2.213749, 'Oil: 87.5<br>Gas: 38.4<br>Coal: 10.1<br>Nuclear: 92.9<br>Hydro: 13.1<br>Total2009: 241.9<br>CO2Emm: 398.7', iconRed], [51.165690999999995, 10.451525999999999, 'Oil: 113.9<br>Gas: 70.2<br>Coal: 71.0<br>Nuclear: 30.5<br>Hydro: 4.2<br>Total2009: 289.8<br>CO2Emm: 795.6', iconRed], [39.074207999999999, 21.824311999999999, 'Oil: 20.2<br>Gas: 3.0<br>Coal: 7.9<br>Nuclear: 0.0<br>Hydro: 1.6<br>Total2009: 32.7<br>CO2Emm: 100.4', iconBlue], [47.162494000000002, 19.503304, 'Oil: 7.3<br>Gas: 9.1<br>Coal: 2.5<br>Nuclear: 3.5<br>Hydro: 0.1<br>Total2009: 22.4<br>CO2Emm: 53.6', iconRed], [64.963051000000007, -19.020835000000002, 'Oil: 1.0<br>Gas: 0.0<br>Coal: 0.1<br>Nuclear: 0.0<br>Hydro: 2.8<br>Total2009: 3.9<br>CO2Emm: 3.5', iconYellow], [53.412909999999997, -8.2438899999999986, 'Oil: 8.0<br>Gas: 4.3<br>Coal: 1.3<br>Nuclear: 0.0<br>Hydro: 0.2<br>Total2009: 13.9<br>CO2Emm: 40.1', iconBlue], [41.871940000000002, 12.56738, 'Oil: 75.1<br>Gas: 64.5<br>Coal: 13.4<br>Nuclear: 0.0<br>Hydro: 10.5<br>Total2009: 163.4<br>CO2Emm: 434.8', iconBlue], [48.019573000000001, 66.923683999999994, 'Oil: 12.0<br>Gas: 17.7<br>Coal: 33.0<br>Nuclear: 0.0<br>Hydro: 1.7<br>Total2009: 64.4<br>CO2Emm: 209.2', iconBlue], [55.169438, 23.881274999999999, 'Oil: 2.9<br>Gas: 2.5<br>Coal: 0.2<br>Nuclear: 2.5<br>Hydro: 0.3<br>Total2009: 8.2<br>CO2Emm: 15.3', iconRed], [52.132632999999998, 5.2912660000000002, 'Oil: 49.4<br>Gas: 35.0<br>Coal: 7.9<br>Nuclear: 1.0<br>Hydro: 0.0<br>Total2009: 93.3<br>CO2Emm: 265.1', iconBlue], [60.472023999999998, 8.4689460000000008, 'Oil: 9.7<br>Gas: 3.7<br>Coal: 0.3<br>Nuclear: 0.0<br>Hydro: 28.8<br>Total2009: 42.5<br>CO2Emm: 39.9', iconYellow], [51.919438, 19.145135999999997, 'Oil: 25.5<br>Gas: 12.3<br>Coal: 53.9<br>Nuclear: 0.0<br>Hydro: 0.7<br>Total2009: 92.3<br>CO2Emm: 320.4', iconBlue], [39.399871999999995, -8.2244539999999997, 'Oil: 12.9<br>Gas: 3.9<br>Coal: 3.6<br>Nuclear: 0.0<br>Hydro: 2.0<br>Total2009: 22.3<br>CO2Emm: 62.7', iconYellow], [45.943160999999996, 24.966760000000001, 'Oil: 9.9<br>Gas: 12.2<br>Coal: 6.2<br>Nuclear: 2.7<br>Hydro: 3.6<br>Total2009: 34.6<br>CO2Emm: 83.7', iconBlue], [61.524009999999997, 105.31875600000001, 'Oil: 124.9<br>Gas: 350.7<br>Coal: 82.9<br>Nuclear: 37.0<br>Hydro: 39.8<br>Total2009: 635.3<br>CO2Emm: 1535.3', iconBlue], [48.669026000000002, 19.699023999999998, 'Oil: 3.9<br>Gas: 5.1<br>Coal: 3.6<br>Nuclear: 3.2<br>Hydro: 1.1<br>Total2009: 16.8<br>CO2Emm: 38.1', iconRed], [40.463667000000001, -3.7492199999999998, 'Oil: 72.9<br>Gas: 31.1<br>Coal: 10.6<br>Nuclear: 12.0<br>Hydro: 6.1<br>Total2009: 132.6<br>CO2Emm: 338.7', iconRed], [60.128160999999999, 18.643501000000001, 'Oil: 13.7<br>Gas: 1.0<br>Coal: 1.6<br>Nuclear: 11.9<br>Hydro: 14.9<br>Total2009: 43.2<br>CO2Emm: 50.9', iconYellow], [46.818187999999999, 8.227511999999999, 'Oil: 12.3<br>Gas: 2.7<br>Coal: 0.1<br>Nuclear: 6.2<br>Hydro: 8.1<br>Total2009: 29.4<br>CO2Emm: 44.5', iconYellow], [38.963745000000003, 35.243321999999999, 'Oil: 28.8<br>Gas: 28.9<br>Coal: 27.2<br>Nuclear: 0.0<br>Hydro: 8.1<br>Total2009: 93.0<br>CO2Emm: 264.1', iconBlue], [38.969718999999998, 59.556278000000006, 'Oil: 5.2<br>Gas: 17.8<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 23.0<br>CO2Emm: 57.9', iconBlue], [48.379432999999999, 31.165579999999999, 'Oil: 14.1<br>Gas: 42.3<br>Coal: 35.0<br>Nuclear: 18.6<br>Hydro: 2.7<br>Total2009: 112.5<br>CO2Emm: 280.8', iconRed], [55.378050999999999, -3.4359730000000002, 'Oil: 74.4<br>Gas: 77.9<br>Coal: 29.7<br>Nuclear: 15.7<br>Hydro: 1.2<br>Total2009: 198.9<br>CO2Emm: 529.1', iconBlue], [41.377490999999999, 64.585262, 'Oil: 4.9<br>Gas: 43.9<br>Coal: 1.4<br>Nuclear: 0.0<br>Hydro: 1.4<br>Total2009: 51.5<br>CO2Emm: 123.5', iconBlue], [32.427908000000002, 53.688045999999993, 'Oil: 83.6<br>Gas: 118.5<br>Coal: 1.4<br>Nuclear: 0.0<br>Hydro: 1.3<br>Total2009: 204.8<br>CO2Emm: 540.3', iconBlue], [29.311659999999996, 47.481766, 'Oil: 19.2<br>Gas: 12.1<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 31.3<br>CO2Emm: 87.2', iconBlue], [25.354825999999999, 51.183883999999999, 'Oil: 8.2<br>Gas: 19.0<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 27.2<br>CO2Emm: 69.8', iconBlue], [23.885942, 45.079161999999997, 'Oil: 121.8<br>Gas: 69.7<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 191.5<br>CO2Emm: 537.6', iconBlue], [23.424075999999999, 53.847818000000004, 'Oil: 21.8<br>Gas: 53.2<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 75.0<br>CO2Emm: 191.9', iconBlue], [27.225728000000004, 2.4929450000000002, 'Oil: 14.9<br>Gas: 24.0<br>Coal: 0.7<br>Nuclear: 0.0<br>Hydro: 0.1<br>Total2009: 39.7<br>CO2Emm: 104.8', iconBlue], [26.820553000000004, 30.802497999999996, 'Oil: 33.7<br>Gas: 38.3<br>Coal: 1.1<br>Nuclear: 0.0<br>Hydro: 3.1<br>Total2009: 76.3<br>CO2Emm: 197.8', iconBlue], [-30.559481999999999, 22.937505999999999, 'Oil: 24.3<br>Gas: 0.0<br>Coal: 99.4<br>Nuclear: 2.7<br>Hydro: 0.2<br>Total2009: 126.8<br>CO2Emm: 468.6', iconGreen], [-25.274398000000001, 133.775136, 'Oil: 42.7<br>Gas: 23.1<br>Coal: 50.8<br>Nuclear: 0.0<br>Hydro: 2.6<br>Total2009: 119.2<br>CO2Emm: 386.6', iconBlue], [23.684994, 90.356331000000011, 'Oil: 4.5<br>Gas: 17.8<br>Coal: 0.4<br>Nuclear: 0.0<br>Hydro: 0.3<br>Total2009: 22.9<br>CO2Emm: 57.0', iconBlue], [35.861660000000001, 104.195397, 'Oil: 404.6<br>Gas: 79.8<br>Coal: 1537.4<br>Nuclear: 15.9<br>Hydro: 139.3<br>Total2009: 2177.0<br>CO2Emm: 7518.5', iconGreen], [22.351185000000001, 114.074201, 'Oil: 14.0<br>Gas: 2.3<br>Coal: 7.6<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 23.9<br>CO2Emm: 78.5', iconBlue], [20.593684, 78.962879999999998, 'Oil: 148.5<br>Gas: 46.7<br>Coal: 245.8<br>Nuclear: 3.8<br>Hydro: 24.0<br>Total2009: 468.9<br>CO2Emm: 1539.1', iconGreen], [-0.78927499999999995, 113.92132700000001, 'Oil: 62.0<br>Gas: 33.0<br>Coal: 30.5<br>Nuclear: 0.0<br>Hydro: 2.7<br>Total2009: 128.2<br>CO2Emm: 388.5', iconBlue], [36.204824000000002, 138.25292400000001, 'Oil: 197.6<br>Gas: 78.7<br>Coal: 108.8<br>Nuclear: 62.1<br>Hydro: 16.7<br>Total2009: 463.9<br>CO2Emm: 1222.1', iconRed], [4.2104839999999992, 101.97576600000001, 'Oil: 21.4<br>Gas: 28.3<br>Coal: 4.0<br>Nuclear: 0.0<br>Hydro: 2.0<br>Total2009: 55.7<br>CO2Emm: 148.0', iconBlue], [-40.900556999999999, 174.88597099999998, 'Oil: 6.8<br>Gas: 3.6<br>Coal: 1.7<br>Nuclear: 0.0<br>Hydro: 5.5<br>Total2009: 17.6<br>CO2Emm: 36.2', iconYellow], [30.375321000000003, 69.345116000000004, 'Oil: 20.6<br>Gas: 34.1<br>Coal: 4.3<br>Nuclear: 0.6<br>Hydro: 6.2<br>Total2009: 65.8<br>CO2Emm: 160.4', iconBlue], [12.879721, 121.77401699999999, 'Oil: 12.1<br>Gas: 3.0<br>Coal: 6.8<br>Nuclear: 0.0<br>Hydro: 2.2<br>Total2009: 24.2<br>CO2Emm: 71.3', iconYellow], [1.3520829999999999, 103.819836, 'Oil: 52.1<br>Gas: 8.7<br>Coal: 0.0<br>Nuclear: 0.0<br>Hydro: 0.0<br>Total2009: 60.8<br>CO2Emm: 180.2', iconBlue], [35.907757000000004, 127.76692199999999, 'Oil: 104.3<br>Gas: 30.4<br>Coal: 68.6<br>Nuclear: 33.4<br>Hydro: 0.7<br>Total2009: 237.5<br>CO2Emm: 663.3', iconRed], [23.69781, 120.96051499999999, 'Oil: 46.6<br>Gas: 10.2<br>Coal: 38.7<br>Nuclear: 9.4<br>Hydro: 0.8<br>Total2009: 105.7<br>CO2Emm: 320.3', iconRed], [15.870032, 100.992541, 'Oil: 44.2<br>Gas: 35.3<br>Coal: 14.1<br>Nuclear: 0.0<br>Hydro: 1.5<br>Total2009: 95.1<br>CO2Emm: 274.4', iconBlue]];
+             var map = new Map('map',map_points,48.7,9.1,2);
+        
+
+           map.gmap.addControl(new GMapTypeControl());
+
+           map.gmap.addControl(new GSmallMapControl());
+
+
+            }
+        }
+        //]]>
+        </script>
+        
+        
+        
+  </head>
+
+  <body onload="load()" onunload="GUnload()">
+    <div id="map" style="width: 1000px; height: 600px"></div>
+  </body>
+</html>
