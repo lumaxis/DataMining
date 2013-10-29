@@ -10,7 +10,7 @@ from sklearn.manifold import Isomap
 from matplotlib import pyplot as plt
 
 #read csv file
-df = pd.read_csv("C:\Users\lukas\Desktop\EnergyMix.csv", index_col=0)
+df = pd.read_csv("EnergyMix.csv", index_col=0)
 
 #create list with dataframe indices
 df_indices = df.index.tolist()
