@@ -15,10 +15,11 @@ import matplotlib.pyplot as plt
 NUM_CLUSTER = 4
 
 # import and ignore 'Total2009' and 'CO2Emm'-columns
-data = pandas.read_csv('EnergyMix.csv', index_col=0)
+data = pandas.read_csv('EnergyMixGeo.csv', index_col=0)
 dataCopy = data
 data = data.drop('Total2009',1)
 data = data.drop('CO2Emm',1)
+data = data.drop(['Lat', 'Long'],1)
 index = data.index
 values = data.values
 
@@ -46,7 +47,6 @@ plt.figure()
 numplt = 411
 for name, group in dataGrouped:
     group = group.drop('Cluster',1)
-    print group.T.index
     plt.subplot(numplt)
     plt.plot(group.T)
     plt.xticks(range(5), group.T.index)
@@ -57,6 +57,11 @@ for name, group in dataGrouped:
     print '\n'
 plt.show()
 
-# write in csv
+# fix round errors in lat and long
+for x, row in dataCopy.T.iteritems():
+    row['Lat'] = round(row['Lat'], 6)
+    row['Long'] = round(row['Long'], 6)
+
+# append clusters and write in csv
 dataCopy['Cluster'] = cluster
-dataCopy.to_csv('EnergyMixClustered.csv')
+dataCopy.to_csv('EnergyMixGeoClustered.csv')
