@@ -49,6 +49,10 @@ for name, group in dataGrouped:
     group = group.drop('Cluster',1)
     plt.subplot(numplt)
     plt.plot(group.T)
+    # we would have added a title to each subplot but for us plt.title('...')
+    # ended up in an error: TypeError: 'str' object is not callable
+    # we did not find a solution yet
+    #plt.title('Cluster %d' % (name))
     plt.xticks(range(5), group.T.index)
     numplt += 1
     print 'Cluster %d:' % (name)
