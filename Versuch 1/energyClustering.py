@@ -30,7 +30,7 @@ values = sk.scale(values, with_mean=0)
 dist = sd.pdist(values, metric='correlation')
 
 # compute clustering
-clustering = ch.linkage(dist, method='average')
+clustering = ch.linkage(dist, method='average', metric='correlation')
 
 # show dendrogram
 ch.dendrogram(clustering, labels=index, orientation='left', leaf_font_size=6)
