@@ -8,16 +8,21 @@ Created on Wed Nov 06 11:21:47 2013
 import pandas as pd
 from sklearn import svm
 import numpy as np
+from sklearn import metrics
 
 # config
 # num values to use for fitting the classifier
-PRED_TIME_DELAY = 24
+PRED_TIME_DELAY = 18
 # num values to predict
 PRED_COUNT = 50
 # num training-sets
 PRED_TRAINING_SETS = 650
-# num days to display  before prediction
+# num days to display in plot  before prediction
 DISPLAY_BEFORE_PRED = 30
+# value of C for SVR
+SVR_C = 400
+#value of epsilon for svr
+SVR_EPS = 0.3
 
 # import data
 data = pd.read_csv('effectiveRates.csv', index_col=0)
@@ -35,8 +40,8 @@ for i in range(PRED_TRAINING_SETS):
 
 # train svr using the generated data
 clf = svm.SVR()
-clf.fit(trainData[:,0:PRED_TIME_DELAY], trainData[:,PRED_TIME_DELAY:25].ravel())
-svm.SVR(C=600, epsilon=0.6)
+clf.fit(trainData[:,0:PRED_TIME_DELAY], trainData[:,PRED_TIME_DELAY:(PRED_TIME_DELAY+1)].ravel())
+svm.SVR(SVR_C, SVR_EPS)
 
 # index of first value to predict
 predIndex = PRED_TRAINING_SETS+PRED_TIME_DELAY-1
@@ -56,3 +61,8 @@ prediction = pd.DataFrame(data=predData[len(predData)-PRED_COUNT:len(predData)],
 dataYahoo = pd.DataFrame(data=data['YHOO'],columns=['YHOO'],index=data.index)
 dataYahoo = dataYahoo.join(prediction, how='outer')
 dataYahoo[predIndex-DISPLAY_BEFORE_PRED:len(dataYahoo.index)].plot()
+
+# compute and print mae
+reference = dataYahoo[predIndex:predIndex+PRED_COUNT]
+mae = metrics.mean_absolute_error(reference['YHOO'].values,prediction.values)
+print 'MAE: %f' % (mae)
