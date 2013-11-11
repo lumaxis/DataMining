@@ -48,8 +48,8 @@ features = df.values[0:64,0:5]
 #     
 # print "Optimale Parameter:"
 # print "C = %2.3f" % (opt_varC)
+# print "epsilon = %2.3f" % (opt_varEpsilon)
 #==============================================================================
-print "epsilon = %2.3f" % (opt_varEpsilon)
 
 opt_varC = 1.9
 opt_varEpsilon = 0.01
