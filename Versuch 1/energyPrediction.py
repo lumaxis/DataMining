@@ -22,36 +22,37 @@ targets = df.values[0:64,6]
 features = df.values[0:64,0:5]
 
 #Suche nach optimalen Parametern
-min_score = 100.0
-opt_varC = 0.0
-opt_varEpsilon = 0.0
+#==============================================================================
+# min_score = 100.0
+# opt_varC = 0.0
+# opt_varEpsilon = 0.0
+# 
+# for varC in [float(j) / 10 for j in range(1, 21, 1)]: 
+#     for varEpsilon in [float(i) / 100 for i in range(1,21,1)]:    
+#         print "Testing with"  
+#         print "varC: %2.3f" % (varC)
+#         print "varEpsilon: %2.3f" % (varEpsilon)
+#         eSVR = SVR(C=varC,epsilon=varEpsilon,kernel='linear')
+#         scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func=metrics.mean_squared_error)
+#                 
+#         if scores[-1] < min_score:
+#             print "Better parameters found!"
+#             print "varC: %2.3f" % (varC)
+#             print "varEpsilon: %2.3f" % (varEpsilon)            
+#             min_score = scores[-1]
+#             opt_varC = varC
+#             opt_varEpsilon = varEpsilon
+#             
+#         #print "Cross Validation scores:"
+#         #print scores
+#     
+# print "Optimale Parameter:"
+# print "C = %2.3f" % (opt_varC)
+#==============================================================================
+print "epsilon = %2.3f" % (opt_varEpsilon)
 
-def optimize():
-    for varC in [float(j) / 10 for j in range(1, 21, 1)]: 
-        for varEpsilon in [float(i) / 100 for i in range(1,21,1)]:    
-            print "Testing with"  
-            print "varC: %2.3f" % (varC)
-            print "varEpsilon: %2.3f" % (varEpsilon)
-            eSVR = SVR(C=varC,epsilon=varEpsilon,kernel='linear')
-            scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func=metrics.mean_squared_error)
-                    
-            if scores[-1] < min_score:
-                print "Better parameters found!"
-                print "varC: %2.3f" % (varC)
-                print "varEpsilon: %2.3f" % (varEpsilon)            
-                min_score = scores[-1]
-                opt_varC = varC
-                opt_varEpsilon = varEpsilon
-                
-            #print "Cross Validation scores:"
-            #print scores
-    
-    print "Optimale Parameter:"
-    print "C = %2.3f" % (opt_varC)
-    print "epsilon = %2.3f" % (opt_varEpsilon)
-
-opt_varC = 0.7
-opt_varEpsilon = 0.0
+opt_varC = 1.9
+opt_varEpsilon = 0.01
 
 #Do cross validation
 eSVR = SVR(C=opt_varC,epsilon=opt_varEpsilon,kernel='linear')
