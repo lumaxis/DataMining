@@ -26,32 +26,34 @@ min_score = 100.0
 opt_varC = 0.0
 opt_varEpsilon = 0.0
 
-for varC in [float(j) / 10 for j in range(1, 20, 1)]: 
-    for varEpsilon in [float(i) / 100 for i in range(0,20,1)]:    
-        print "Testing with"  
-        print "varC: %2.3f" % (varC)
-        print "varEpsilon: %2.3f" % (varEpsilon)
-        eSVR = SVR(C=varC,epsilon=varEpsilon,kernel='linear')
-        scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func=metrics.mean_squared_error)
-                
-        if scores[-1] < min_score:
-            print "Better parameters found!"
+def optimize():
+    for varC in [float(j) / 10 for j in range(1, 21, 1)]: 
+        for varEpsilon in [float(i) / 100 for i in range(1,21,1)]:    
+            print "Testing with"  
             print "varC: %2.3f" % (varC)
-            print "varEpsilon: %2.3f" % (varEpsilon)            
-            min_score = scores[-1]
-            opt_varC = varC
-            opt_varEpsilon = varEpsilon
-            
-        #print "Cross Validation scores:"
-        #print scores
+            print "varEpsilon: %2.3f" % (varEpsilon)
+            eSVR = SVR(C=varC,epsilon=varEpsilon,kernel='linear')
+            scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func=metrics.mean_squared_error)
+                    
+            if scores[-1] < min_score:
+                print "Better parameters found!"
+                print "varC: %2.3f" % (varC)
+                print "varEpsilon: %2.3f" % (varEpsilon)            
+                min_score = scores[-1]
+                opt_varC = varC
+                opt_varEpsilon = varEpsilon
+                
+            #print "Cross Validation scores:"
+            #print scores
+    
+    print "Optimale Parameter:"
+    print "C = %2.3f" % (opt_varC)
+    print "epsilon = %2.3f" % (opt_varEpsilon)
 
-print "Optimale Parameter:"
-print "C = %2.3f" % (opt_varC)
-print "epsilon = %2.3f" % (opt_varEpsilon)
+opt_varC = 0.7
+opt_varEpsilon = 0.0
 
-#opt_varC = 1.7
-#opt_varEpsilon = 0.1
-
+#Do cross validation
 eSVR = SVR(C=opt_varC,epsilon=opt_varEpsilon,kernel='linear')
 scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func=metrics.mean_squared_error)
 
@@ -73,6 +75,8 @@ scores = cross_validation.cross_val_score(eSVR,features,targets,cv=10,score_func
 
 #Do epsilon-Support Vector Regression
 eSVR.fit(features, targets)
+print "SVR coef_:"
+print eSVR.coef_
 prediction = eSVR.predict(features)
 
 # Print Prediction Error graph
@@ -92,5 +96,7 @@ plt.plot(prediction, prediction, 'ro', targets, targets, 'bo')
 plt.show()
 
 # Calculate SVR score
-score = eSVR.score(features, targets)
-print "SVR Score%2.3f" % (score)
+#==============================================================================
+# score = eSVR.score(features, targets)
+# print "SVR Score%2.3f" % (score)
+#==============================================================================
