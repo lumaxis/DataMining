@@ -121,8 +121,8 @@ def getRecommendations(prefs,person,similarity):
     del result['Snakes on a Plane']
     del result['You, Me and Dupree']
     del result['Superman Returns']
-    result = result.drop(person)
-    #result = result[result['Korrelation'] > 0]
-    result['Korrelation'] = pd.Series(topMatches(critics, 'Toby', 'sim_pearson'))
+    result['Korrelation'] = pd.Series(topMatches(critics, person, 'sim_pearson'))
+    result = result[result['Korrelation'] >= 0]
+    result['K * Lady'] = result.Korrelation * result['Lady in the Water']
 
     return result
