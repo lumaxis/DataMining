@@ -19,6 +19,9 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 'Toby': {'Snakes on a Plane':4.5,'You, Me and Dupree':1.0,'Superman Returns':4.0}
 }
 
+# the critics dictionary transformed for ICF
+transCritics={'Lady in the Water': {'Lisa Rose': 2.5, 'Jack Matthews': 3.0, 'Michael Phillips': 2.5, 'Gene Seymour': 3.0, 'Mick LaSalle': 3.0}, 'Snakes on a Plane': {'Jack Matthews': 4.0, 'Mick LaSalle': 4.0, 'Claudia Puig': 3.5, 'Lisa Rose': 3.5, 'Toby': 4.5, 'Gene Seymour': 3.5, 'Michael Phillips': 3.0}, 'Just My Luck': {'Claudia Puig': 3.0, 'Lisa Rose': 3.0, 'Gene Seymour': 1.5, 'Mick LaSalle': 2.0}, 'Superman Returns': {'Jack Matthews': 5.0, 'Mick LaSalle': 3.0, 'Claudia Puig': 4.0, 'Lisa Rose': 3.5, 'Toby': 4.0, 'Gene Seymour': 5.0, 'Michael Phillips': 3.5}, 'The Night Listener': {'Jack Matthews': 3.0, 'Mick LaSalle': 3.0, 'Claudia Puig': 4.5, 'Lisa Rose': 3.0, 'Gene Seymour': 3.0, 'Michael Phillips': 4.0}, 'You, Me and Dupree': {'Jack Matthews': 3.5, 'Mick LaSalle': 2.0, 'Claudia Puig': 2.5, 'Lisa Rose': 2.5, 'Toby': 1.0, 'Gene Seymour': 3.5}}
+
 import matplotlib.pyplot as plt
 
 from math import sqrt
@@ -108,7 +111,7 @@ def topMatches(prefs,person,similarity):
     if similarity == 'sim_euclid':
         for item in prefs:
             if person != item:
-                ti[item] = sim_euclid(prefs,person,item,normed=False)
+                ti[item] = sim_euclid(prefs,person,item,normed=True)
     else:
         for item in prefs:
             if person != item:
@@ -126,3 +129,52 @@ def getRecommendations(prefs,person,similarity):
     result['K * Lady'] = result.Korrelation * result['Lady in the Water']
 
     return result
+
+# transforms the dictionary critics so that we can use the sim_-functions
+# directly for ICF
+def transformCriticsICF():
+    trans = {}
+    for n,v in critics.iteritems():
+        for s,r in v.iteritems():
+            if not trans.has_key(s):
+                trans[s] = {}
+            trans[s][n] = r
+    return trans
+
+# calculate similarity-matrix for the given dict
+def calculateSimilarItems(prefs,similarity):
+    simItems = {}
+    for i in transCritics.iterkeys():
+        simItems[i] = topMatches(prefs, i, similarity)
+    return simItems
+
+# get recommendations for a given set of ratings like:
+# {'Snakes on a Plane':4.5,'Superman Returns':4.0,'You, Me and Dupree':1.0}
+def getRecommendedItem(rating,similarity):
+    sim = calculateSimilarItems(transCritics,similarity)
+    
+    # find out what to recommend (unknown=items that the user does not know
+    # and therefore can be recommended, known=items that the user knows and
+    # has rated)
+    unknown = [k for k in transCritics.iterkeys() if k not in rating.keys()]
+    known = [k for k in transCritics.iterkeys() if k in rating.keys()]
+    
+    # initialize dicts
+    sumSim = {k:0.0 for k in unknown}
+    sumSimXB = {k:0.0 for k in unknown}
+    
+    # calculate sum over similarities per col (sumSim) and sum over similarities
+    # multiplied by the user given rating (sumSimXB)
+    for u in unknown:
+        for k in known:        
+            if sim[u][k]>0 or similarity=='sim_euclid':
+                sumSimXB[u] += sim[u][k]*rating[k]
+                sumSim[u] += sim[u][k]
+                
+    # calculate recommendation
+    rec = {}
+    for u in unknown:
+        rec[u] = sumSimXB[u]/sumSim[u] if sumSim[u]>0 else 0.0
+    return rec
+    
+print getRecommendedItem({'Snakes on a Plane':4.5,'Superman Returns':4.0,'You, Me and Dupree':1.0},'sim_euclid')
