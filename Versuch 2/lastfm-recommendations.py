@@ -25,9 +25,6 @@ def createLastfmUserDict(group):
         allBands.extend(topArtists)
         userTopArtists[u.get_name()] = topArtists
     userDict = pd.DataFrame(index = [u.get_name() for u in group], columns = allBands)
-    
-    #
-    # TODO: can we do this more efficient??
     for u in group:
         for a in allBands:
             userDict.loc[u.get_name(),a] = 1 if (a in userTopArtists[u.get_name()]) else 0
