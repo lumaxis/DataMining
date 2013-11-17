@@ -26,9 +26,7 @@ import matplotlib.pyplot as plt
 
 from math import sqrt
 import numpy as np
-import pandas as pd
-import scipy.spatial.distance as sci
-
+import operator
 
 def sim_euclid(prefs,person1,person2,normed=False):
   ''' Returns a euclidean-distance-based similarity score for 
@@ -119,16 +117,55 @@ def topMatches(prefs,person,similarity):
 
     return ti
 
-def getRecommendations(prefs,person,similarity):
-    result = pd.DataFrame.from_dict(prefs, orient='index')
-    del result['Snakes on a Plane']
-    del result['You, Me and Dupree']
-    del result['Superman Returns']
-    result['Korrelation'] = pd.Series(topMatches(critics, person, 'sim_pearson'))
-    result = result[result['Korrelation'] >= 0]
-    result['K * Lady'] = result.Korrelation * result['Lady in the Water']
+def getRecommendations(prefs,client,similarity):
+    sims = topMatches(prefs,client,similarity)
+    print 'Correlations:'
+    print sims
 
-    return result
+    #initialize weighted ratings dictionary
+    weightedRatings = {}
+    for person in sims:
+        if sims[person] >= 0:
+            for movie in prefs[person]:
+                if prefs[client].has_key(movie) == False:
+                    weightedRatings[movie] = {}
+
+    #calculate weighted ratings
+    for person in sims:
+        #only for people whore correlation is bigger than zero
+        if sims[person] >= 0:
+            for movie in prefs[person]:
+                #do only for movies the client has not already seen
+                if prefs[client].has_key(movie) == False:
+                    #weightedRatings[movie] = {}
+                    weightedRatings[movie][person] = sims[person] * prefs[person][movie]
+    print "Weighted Ratings:"
+    print weightedRatings
+
+    sums = {}
+    for movie in weightedRatings:
+        sums[movie] = sum(weightedRatings[movie].itervalues())
+    print "Weighted Ratings Sums:"
+    print sums
+
+    kSums = {}
+    #initialize kSums dictionary
+    for movie in weightedRatings:
+        kSums[movie] = 0
+    #calculate kSums for each movie
+    for movie in weightedRatings:
+        for person in sims:
+             if sims[person] >= 0:
+                if prefs[person].has_key(movie):
+                    kSums[movie] = kSums[movie] + sims[person]
+    print "KSums:"
+    print kSums
+
+    results = {}
+    for movie in sums:
+        results[movie] = sums[movie]/kSums[movie]
+
+    return sorted(results.iteritems(), key=operator.itemgetter(1), reverse=True)
 
 # transforms the dictionary critics so that we can use the sim_-functions
 # directly for ICF
