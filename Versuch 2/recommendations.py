@@ -118,6 +118,7 @@ def topMatches(prefs,person,similarity):
     return ti
 
 def getRecommendations(prefs,client,similarity):
+    print prefs
     sims = topMatches(prefs,client,similarity)
     print 'Correlations:'
     print sims
@@ -126,44 +127,44 @@ def getRecommendations(prefs,client,similarity):
     weightedRatings = {}
     for person in sims:
         if sims[person] >= 0:
-            for movie in prefs[person]:
-                if prefs[client].has_key(movie) == False:
-                    weightedRatings[movie] = {}
+            for item in prefs[person]:
+                #if prefs[client].has_key(item) == False:
+                    weightedRatings[item] = {}
 
     #calculate weighted ratings
     for person in sims:
         #only for people whore correlation is bigger than zero
         if sims[person] >= 0:
-            for movie in prefs[person]:
+            for item in prefs[person]:
                 #do only for movies the client has not already seen
-                if prefs[client].has_key(movie) == False:
+                #if prefs[client].has_key(item) == False:
                     #weightedRatings[movie] = {}
-                    weightedRatings[movie][person] = sims[person] * prefs[person][movie]
+                    weightedRatings[item][person] = sims[person] * prefs[person][item]
     print "Weighted Ratings:"
     print weightedRatings
 
     sums = {}
-    for movie in weightedRatings:
-        sums[movie] = sum(weightedRatings[movie].itervalues())
+    for item in weightedRatings:
+        sums[item] = sum(weightedRatings[item].itervalues())
     print "Weighted Ratings Sums:"
     print sums
 
     kSums = {}
     #initialize kSums dictionary
-    for movie in weightedRatings:
-        kSums[movie] = 0
+    for item in weightedRatings:
+        kSums[item] = 0
     #calculate kSums for each movie
-    for movie in weightedRatings:
+    for item in weightedRatings:
         for person in sims:
              if sims[person] >= 0:
-                if prefs[person].has_key(movie):
-                    kSums[movie] = kSums[movie] + sims[person]
+                if prefs[person].has_key(item):
+                    kSums[item] = kSums[item] + sims[person]
     print "KSums:"
     print kSums
 
     results = {}
-    for movie in sums:
-        results[movie] = sums[movie]/kSums[movie]
+    for item in sums:
+        results[item] = sums[item]/kSums[item]
 
     return sorted(results.iteritems(), key=operator.itemgetter(1), reverse=True)
 
