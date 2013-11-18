@@ -4,6 +4,7 @@ Created on Mon Nov 18 10:13:25 2013
 
 @author: Mathis
 """
+import operator
 
 '''
 splits the given doc into lowercase words
@@ -43,15 +44,15 @@ class Classifier:
     cc = {}
     
 
-    def __init__ (self):
+    def __init__ (self, cats):
         self.fc = {}
-        self.cc = {'good':0, 'bad':0}
+        self.cc = {cats[0]:0, cats[1]:0}
         self.getfeatures = getwords
 
 
     def incf(self,f,cat):
         if self.fc.has_key(f) == False:
-            self.fc[f] = {'good':0, 'bad':0}
+            self.fc[f] = {self.cats[0]:0, self.cats[1]:0}
         self.fc[f][cat] =+ 1
 
     def incc(self,cat):
@@ -76,8 +77,8 @@ class Classifier:
     def train(self,item,cat):
         features = self.getfeatures(item)
         for word in features:
-            self.incf(self,word,cat)
-        self.incc(self,cat)
+            self.incf(word,cat)
+        self.incc(cat)
 
 
     '''
@@ -87,13 +88,24 @@ class Classifier:
         # the probability to return if f did not occur yet in training-data
 
         initprob = 0.5
-        cnt = self.fc[f]['good']+self.fc[f]['bad']
+        cnt = self.fc[f][self.cats[0]]+self.fc[f][self.cats[1]]
         return (initprob+cnt*self.fprob(f,cat))/(1+cnt)
 
     def prob(self,item,cat):
         result = 1
         for w in item:
-            result = result * self.weightedprob(self,w,cat)
+            result = result * self.weightedprob(w,cat)
 
 
-        return result * self.catcount(self,cat) / self.totalcount()
+        return result * self.catcount(cat) / self.totalcount()
+
+    def classify(self, item):
+        catProbs = {}
+        for cat in self.cats:
+            catProbs[cat] = self.prob(item, cat)
+
+        for cat in catProbs:
+            catProbs[cat] = catProbs[cat]/sum(catProbs)
+
+        return max(catProbs.iteritems(), key=operator.itemgetter(1))[0]
+
