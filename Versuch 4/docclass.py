@@ -39,5 +39,7 @@ class Classifier:
     def train(self,item,cat):
         features = self.getfeatures(item)
         for word in features:
-            self.incf(self,word,)
+            self.incf(self,word,cat)
+        self.incc(self,cat)
+        
 
