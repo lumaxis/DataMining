@@ -28,8 +28,18 @@ class Classifier:
         self.cc = {'good':0, 'bad':0}
     
     '''
-    calculates the propability that a given word f belongs to category cat
+    calculates the probability that a given word f belongs to category cat
     '''
     def fprob(self,f,cat):
+        return self.fc[f][cat]/self.cc[cat]
+    
+    '''
+    calculates the same propability as fprob but corrects extrem values that
+    may occur if a word does not occur often in training data
+    '''
+    def weightedprob(self,f,cat):
+        # the probability to return if f did not occur yet in training-data
+        initprob = 0.5
         
-        
+        cnt = self.fc[f]['good']+self.fc[f]['bad']
+        return (initprob+cnt*self.fprob(f,cat))/(1+cnt)
