@@ -12,7 +12,7 @@ splits the given doc into lowercase words
 def getwords(doc):
     # maximum an minimum length of words that should be handled
     maxlength = 25
-    minlength = 3    
+    minlength = 4
     
     sep = ['.',',','?','!',';','"','\'',':']
     res = {}
@@ -38,13 +38,12 @@ class Classifier:
     '''
     fc = {}
 
-    '''
-    a dictionary that counts the number documents in both categories
-    '''
+    # a dictionary that counts the number documents in both categories
     cc = {}
     
 
     def __init__ (self, cats):
+        self.cats = cats
         self.fc = {}
         self.cc = {cats[0]:0, cats[1]:0}
         self.getfeatures = getwords
@@ -58,9 +57,7 @@ class Classifier:
     def incc(self,cat):
         self.cc[cat] =+ 1
 
-    '''
-    calculates the probability that a given word f belongs to category cat
-    '''
+    # calculates the probability that a given word f belongs to category cat
     def fprob(self,f,cat):
         return self.fc[f][cat]/self.cc[cat] if self.fc.has_key(f) else 0
 
@@ -88,8 +85,7 @@ class Classifier:
         # the probability to return if f did not occur yet in training-data
 
         initprob = 0.5
-        cnt = self.fc[f][self.cats[0]]+self.fc[f][self.cats[1]]
-if self.fc.has_key(f) else 0
+        cnt = self.fc[f][self.cats[0]]+self.fc[f][self.cats[1]] if self.fc.has_key(f) else 0
         return (initprob+cnt*self.fprob(f,cat))/(1+cnt)
 
     def prob(self,item,cat):
@@ -98,7 +94,6 @@ if self.fc.has_key(f) else 0
         for w in item:
             result = result * self.weightedprob(w,cat)
 
-
         return result * self.catcount(cat) / self.totalcount()
 
     def classify(self, item):
@@ -106,8 +101,9 @@ if self.fc.has_key(f) else 0
         for cat in self.cats:
             catProbs[cat] = self.prob(item, cat)
 
+        sumCatProbs = sum(catProbs.values())
         for cat in catProbs:
-            catProbs[cat] = catProbs[cat]/sum(catProbs)
+            catProbs[cat] = catProbs[cat]/sumCatProbs
 
         return max(catProbs.iteritems(), key=operator.itemgetter(1))[0]
 

@@ -41,20 +41,17 @@ test=["http://rss.golem.de/rss.php?r=sw&feed=RSS0.91",
 for feed in trainTech:
     f=feedparser.parse(feed)
     for e in f.entries:
-      print '\n---------------------------'
-      fulltext=stripHTML(e.title+' '+e.description)
-      print fulltext
+        fulltext=stripHTML(e.title+' '+e.description)
+        classifier.train(fulltext,'Tech')
 
 for feed in trainNonTech:
     f=feedparser.parse(feed)
     for e in f.entries:
-      print '\n---------------------------'
-      fulltext=stripHTML(e.title+' '+e.description)
-      print fulltext
+        fulltext=stripHTML(e.title+' '+e.description)
+        classifier.train(fulltext,'NonTech')
 
 for feed in test:
     f=feedparser.parse(feed)
     for e in f.entries:
-      print '\n---------------------------'
-      fulltext=stripHTML(e.title+' '+e.description)
-      print fulltext
+        fulltext=stripHTML(e.title+' '+e.description)
+        print classifier.classify(fulltext)
