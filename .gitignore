@@ -219,3 +219,5 @@ pip-log.txt
 
 # compiled python files
 *.pyc
+
+/Versuch 4/.idea
