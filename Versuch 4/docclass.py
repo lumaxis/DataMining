@@ -61,7 +61,7 @@ class Classifier:
     calculates the probability that a given word f belongs to category cat
     '''
     def fprob(self,f,cat):
-        return self.fc[f][cat]/self.cc[cat]
+        return self.fc[f][cat]/self.cc[cat] if self.fc.has_key(f) else 0
 
     def fcount(self,f,cat):
         return self.fc[f][cat]
@@ -87,7 +87,7 @@ class Classifier:
         # the probability to return if f did not occur yet in training-data
 
         initprob = 0.5
-        cnt = self.fc[f]['good']+self.fc[f]['bad']
+        cnt = self.fc[f]['good']+self.fc[f]['bad'] if self.fc.has_key(f) else 0
         return (initprob+cnt*self.fprob(f,cat))/(1+cnt)
 
     def prob(self,item,cat):
