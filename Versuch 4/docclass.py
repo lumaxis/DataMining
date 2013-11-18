@@ -76,8 +76,8 @@ class Classifier:
     def train(self,item,cat):
         features = self.getfeatures(item)
         for word in features:
-            self.incf(self,word,cat)
-        self.incc(self,cat)
+            self.incf(word,cat)
+        self.incc(cat)
 
 
     '''
@@ -92,8 +92,9 @@ class Classifier:
 
     def prob(self,item,cat):
         result = 1
+        item = self.getfeatures(item)
         for w in item:
-            result = result * self.weightedprob(self,w,cat)
+            result = result * self.weightedprob(w,cat)
 
 
-        return result * self.catcount(self,cat) / self.totalcount()
+        return result * self.catcount(cat) / self.totalcount()
