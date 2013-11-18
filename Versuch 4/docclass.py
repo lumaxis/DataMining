@@ -45,13 +45,13 @@ class Classifier:
     def __init__ (self, cats):
         self.cats = cats
         self.fc = {}
-        self.cc = {cats[0]:0, cats[1]:0}
+        self.cc = {k:0 for k in cats}
         self.getfeatures = getwords
 
 
     def incf(self,f,cat):
         if self.fc.has_key(f) == False:
-            self.fc[f] = {self.cats[0]:0, self.cats[1]:0}
+            self.fc[f] = {k:0 for k in self.cc.iterkeys()}
         self.fc[f][cat] =+ 1
 
     def incc(self,cat):
@@ -59,7 +59,7 @@ class Classifier:
 
     # calculates the probability that a given word f belongs to category cat
     def fprob(self,f,cat):
-        return self.fc[f][cat]/self.cc[cat] if self.fc.has_key(f) else 0
+        return self.fc[f][cat]/self.cc[cat] if self.fc.has_key(f) & self.cc[cat] != 0 else 0
 
     def fcount(self,f,cat):
         return self.fc[f][cat]
