@@ -9,7 +9,7 @@ def getwords():
     return []
 
 class Classifier:
-    
+
     '''
     a dictionary like this:
     {
@@ -20,13 +20,13 @@ class Classifier:
     }
     '''
     fc = {}
-    
+
     '''
     a dictionary that counts the number documents in both categories
     '''
     cc = {}
     getfeatures = getwords
-    
+
     def __init__ (self):
         self.fc = {}
         self.cc = {'good':0, 'bad':0}
@@ -73,3 +73,10 @@ class Classifier:
         cnt = self.fc[f]['good']+self.fc[f]['bad']
         return (initprob+cnt*self.fprob(f,cat))/(1+cnt)
 
+    def prob(self,item,cat):
+        result = 1
+        for w in item:
+            result = result * self.weightedprob(self,w,cat)
+
+
+        return result * self.catcount(self,cat) / self.totalcount()
