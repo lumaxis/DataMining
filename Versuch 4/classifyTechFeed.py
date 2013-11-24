@@ -1,6 +1,6 @@
 import docclass
-categories={'Tech':[],'Economy':[],'Politics':[],'Sport':[]}
-classifier = docclass.Classifier(categories.keys())
+
+classifier = docclass.Classifier(['Tech','NonTech'])
 
 import feedparser
 
@@ -18,45 +18,40 @@ def stripHTML(h):
   return p
 
 
-categories['Tech'] = ['http://rss.chip.de/c/573/f/7439/index.rss',
+trainTech=['http://rss.chip.de/c/573/f/7439/index.rss',
            'http://feeds.feedburner.com/netzwelt',
            'http://rss1.t-online.de/c/11/53/06/84/11530684.xml',
            'http://www.computerbild.de/rssfeed_2261.xml?node=13',
            'http://www.heise.de/newsticker/heise-top-atom.xml']
 
-categories['Economy'] = ['http://newsfeed.zeit.de/wirtschaft/index',
-              'http://www.faz.net/rss/aktuell/wirtschaft']
-
-categories['Politics'] = ['http://www.welt.de/politik/?service=Rss',
-               'http://www.faz.net/rss/aktuell/politik'
-                'http://www.spiegel.de/politik/index.rss']
-
-categories['Sport'] = ['http://www.faz.net/rss/aktuell/sport'
-            'http://www.spiegel.de/sport/index.rss']
-
+trainNonTech=['http://newsfeed.zeit.de/index',
+              'http://newsfeed.zeit.de/wirtschaft/index',
+              'http://www.welt.de/politik/?service=Rss',
+              'http://www.spiegel.de/schlagzeilen/tops/index.rss',
+              'http://www.sueddeutsche.de/app/service/rss/alles/rss.xml'
+              ]
 test=["http://rss.golem.de/rss.php?r=sw&feed=RSS0.91",
           'http://newsfeed.zeit.de/politik/index',
-          'http://www.welt.de/?service=Rss',
-          'http://rss.sueddeutsche.de/rss/Politik'
-          'http://rss.sueddeutsche.de/rss/Sport'
-          'http://rss.sueddeutsche.de/rss/Wirtschaft'
+          'http://www.welt.de/?service=Rss'
            ]
 
 
 
 
-for key,value in categories.iteritems():
-    for feed in value:
-        print feed
-        f=feedparser.parse(feed)
-        for e in f.entries:
-            fulltext=stripHTML(e.title+' '+e.description)
-            print key
-            classifier.train(fulltext,key)
+for feed in trainTech:
+    f=feedparser.parse(feed)
+    for e in f.entries:
+        fulltext=stripHTML(e.title+' '+e.description)
+        classifier.train(fulltext,'Tech')
+
+for feed in trainNonTech:
+    f=feedparser.parse(feed)
+    for e in f.entries:
+        fulltext=stripHTML(e.title+' '+e.description)
+        classifier.train(fulltext,'NonTech')
 
 for feed in test:
     f=feedparser.parse(feed)
     for e in f.entries:
         fulltext=stripHTML(e.title+' '+e.description)
-        print fulltext
         print classifier.classify(fulltext)
