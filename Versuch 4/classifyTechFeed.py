@@ -47,11 +47,9 @@ test=["http://rss.golem.de/rss.php?r=sw&feed=RSS0.91",
 
 for key,value in categories.iteritems():
     for feed in value:
-        print feed
         f=feedparser.parse(feed)
         for e in f.entries:
             fulltext=stripHTML(e.title+' '+e.description)
-            print key
             classifier.train(fulltext,key)
 
 for feed in test:
