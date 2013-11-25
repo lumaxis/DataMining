@@ -83,4 +83,13 @@ def makematrix(allw, articlew):
             del wordvec[word]
 
     wordInArt= []
-    print wordInArt
+    for article in articlew:
+        line = []
+        for word in wordvec:
+            if word in article.keys():
+                line.append(article[word])
+            else:
+                line.append(0)
+        wordInArt.append(line)
+
+
