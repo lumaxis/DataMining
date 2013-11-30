@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import feedparser
 import re
-import numpy as np
+import pandas as pd
+import csv
 
 feedlist=['http://feeds.reuters.com/reuters/topNews',
           'http://feeds.reuters.com/reuters/businessNews',
@@ -91,5 +93,12 @@ def makematrix(allw, articlew):
             else:
                 line.append(0)
         wordInArt.append(line)
+        
+    return wordvec,wordInArt
 
+allwords,articlewords,articletitles = getarticlewords()
+wordvec,m = makematrix(allwords,articlewords)
+df = pd.DataFrame(m, index=articletitles, columns=wordvec)
+df.to_csv('test.csv', quoting=csv.QUOTE_NONNUMERIC)
 
+print 'Zusammenfassung:\nArtikel: %d\nWörter gesamt: %d\nWörter gefiltert: %d' % (len(articletitles), len(allwords), len(wordvec))
