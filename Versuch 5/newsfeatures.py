@@ -99,6 +99,6 @@ def makematrix(allw, articlew):
 allwords,articlewords,articletitles = getarticlewords()
 wordvec,m = makematrix(allwords,articlewords)
 df = pd.DataFrame(m, index=articletitles, columns=wordvec)
-df.to_csv('test.csv', quoting=csv.QUOTE_NONNUMERIC)
+df.to_csv('artikel-wort-matrix.csv', quoting=csv.QUOTE_NONNUMERIC)
 
 print 'Zusammenfassung:\nArtikel: %d\nWörter gesamt: %d\nWörter gefiltert: %d' % (len(articletitles), len(allwords), len(wordvec))

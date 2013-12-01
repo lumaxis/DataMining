@@ -13,8 +13,7 @@ import math
 Loads the matrix into a dataframe
 """
 def loadMatrix():
-    #d = pd.read_csv('artikel-wort-matrix.csv', index_col=0)
-    d = pd.read_csv('test.csv', index_col=0)
+    d = pd.read_csv('artikel-wort-matrix.csv', index_col=0)
     return d
 
 """
@@ -40,16 +39,16 @@ def nnmf(A,m,it):
     # create H and W with random values
     H = np.random.rand(m,numwords)
     W = np.random.rand(numarticles,m)
-    
+
     for i in range(it):
         
         # calculate current costs
         c = cost(A,np.dot(W,H))
-        
+
         # exit if current costs lower than 5        
         if (c<5):
             break        
-        
+
         # W^T*A
         WtA = np.dot(np.transpose(W),A)        
         # W^T*W*H
@@ -57,14 +56,18 @@ def nnmf(A,m,it):
         
         # calculate new H
         H = (WtA/WtWH)*H
+        H = np.nan_to_num(H)
         
         # A*H^T
         AHt = np.dot(A,np.transpose(H))        
         # W*H*H^T
-        WHHt = np.dot(np.dot(W,H),np.transpose(H))          
+        WHHt = np.dot(np.dot(W,H),np.transpose(H))
         
         # calculate new W
         W = (AHt/WHHt)*W
+        W = np.nan_to_num(W)
+         
+    print "Aktuelle Kosten: %f" % c  
          
     return W,H
             
@@ -96,14 +99,24 @@ def showfeatures(W,H,titlevec,wordvec,numWordsPerFeature=6,numFeaturesPerItem=3)
     articleFeatures = [[v[1] for v in a[:numFeaturesPerItem]] for a in tmp]
     
     # print result
-    print "Es lassen sich folgende %d Merkmale definierten:" % len(features)
+    """print "Es lassen sich folgende %d Merkmale definierten:" % len(features)
     for i,f in zip(range(len(features)),features):
         print "Merkmal %d: %s" % (i, f)
     print "\n"
     print "Den Artikeln lassen sich diese Merkmale wie folgt zuordnen:"
     for a,f in zip(titlevec,articleFeatures):
-        print "%s: %s" % (a,f)
+        print "%s: %s" % (a,f)"""
+        
+    for i,f in zip(range(len(features)),features):
+        print "\n"
+        print "MERKMAL %d: %s:" % (i, f)
+        print "-------------------------------------------------------------------------"
+        for a,x in zip(titlevec,articleFeatures):
+            if i in x:
+                print "%s %s" % (a,x)
+        
     
 m = loadMatrix()
-W,H = nnmf(m.values,4,3)
-showfeatures(W,H,m.index,m.T.index)
+W,H = nnmf(m.values,20,15)
+print "\n\n\n"
+showfeatures(W,H,m.index,m.T.index,numFeaturesPerItem=1)
