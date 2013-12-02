@@ -98,6 +98,8 @@ def makematrix(allw, articlew):
 
 allwords,articlewords,articletitles = getarticlewords()
 wordvec,m = makematrix(allwords,articlewords)
+
+# Write data in .csv-file
 df = pd.DataFrame(m, index=articletitles, columns=wordvec)
 df.to_csv('artikel-wort-matrix.csv', quoting=csv.QUOTE_NONNUMERIC)
 

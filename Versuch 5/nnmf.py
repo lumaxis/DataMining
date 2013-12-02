@@ -98,7 +98,7 @@ def showfeatures(W,H,titlevec,wordvec,numWordsPerFeature=6,numFeaturesPerItem=3)
     # 3 features for each article
     articleFeatures = [[v[1] for v in a[:numFeaturesPerItem]] for a in tmp]
     
-    # print result
+
     """print "Es lassen sich folgende %d Merkmale definierten:" % len(features)
     for i,f in zip(range(len(features)),features):
         print "Merkmal %d: %s" % (i, f)
@@ -107,6 +107,7 @@ def showfeatures(W,H,titlevec,wordvec,numWordsPerFeature=6,numFeaturesPerItem=3)
     for a,f in zip(titlevec,articleFeatures):
         print "%s: %s" % (a,f)"""
         
+    # print result   
     for i,f in zip(range(len(features)),features):
         print "\n"
         print "MERKMAL %d: %s:" % (i, f)
