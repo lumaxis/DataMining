@@ -33,7 +33,7 @@ def stripHTML(h):
 from nltk.corpus import stopwords
 sw = stopwords.words ('english')
 def separatewords(text ):
-    splitter = re.compile('\\W*')
+    splitter = re.compile('\W*')
     return [s.lower() for s in splitter.split(text) if len(s)>4 and s not in sw]
 
 def getarticlewords():
@@ -93,7 +93,6 @@ def makematrix(allw, articlew):
             else:
                 line.append(0)
         wordInArt.append(line)
-        
     return wordvec,wordInArt
 
 allwords,articlewords,articletitles = getarticlewords()
