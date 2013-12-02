@@ -1,8 +1,7 @@
 from os.path import isdir,join,normpath
 from os import listdir
 
-import Image
-
+from PIL import Image
 from numpy import asfarray,dot,argmin,zeros
 from numpy import average,sort,trace
 from numpy.linalg import svd,eigh
@@ -31,7 +30,13 @@ def parseDirectory(directoryName,extension):
 #
 #
 
-
+def generateListOfImgs(listOfTrainFiles):
+    l = []
+    for f in listOfTrainFiles:
+        img = Image.open(f)
+        l.append(img)
+    return l        
+    
 ####################################################################################
 #Start of main programm
 
@@ -40,9 +45,8 @@ TrainDir=tkFileDialog.askdirectory(title="Choose Directory of training images")
 #Choose the file extension of the image files
 Extension='png' 
 #Choose the image which shall be recognized
-testImageDirAndFilename=tkFileDialog.askopenfilename(title="Choose Image to detect")
+#testImageDirAndFilename=tkFileDialog.askopenfilename(title="Choose Image to detect")
+generateListOfImgs(parseDirectory(TrainDir,Extension))
 
 ####################################################################################
 # Implement required functionality of the main programm here
-
-
