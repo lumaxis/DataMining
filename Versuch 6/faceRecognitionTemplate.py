@@ -7,6 +7,8 @@ from numpy import average,sort,argsort,trace
 from numpy.linalg import svd,eigh
 from numpy import concatenate, reshape
 from math import sqrt
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 import tkFileDialog
 
@@ -48,7 +50,6 @@ def convertImgListToNumpyData(imgList):
 
 def calculateEigenfaces(adjfaces):
     X = transpose(adjfaces)
-    #CV = dot(X,adjfaces)
 
     #Calculate Eigenvalues and simplified Eigenvectors
     w,v = eigh(dot(adjfaces,X))
@@ -59,18 +60,19 @@ def calculateEigenfaces(adjfaces):
     #Sort Eigenvalues to get indices for selection of relevant Eigenvectors
     idx = w.argsort()[::-1]
 
-    #Order Eigenvalues by indices?
+    #Order Eigenvalues by indices and return them
     w = w[idx]
-
-    #Order Eigenvectors by indices
     v = v[:,idx]
     return v
 
-def reshapeVectorToImage(x):
-    global width,height
-    print x.shape
-    print width*height
-    return x.reshape(height,width)
+"""
+Calculates the corresponding point of img in space
+"""
+def projectImageToEigenspace(img,space):
+    pointInEigenspace = zeros(shape=(6))
+    for i in range(6):
+        pointInEigenspace[i] = dot(transpose(space[:,i:i+1]),img)
+    return pointInEigenspace
 
 ####################################################################################
 #Start of main programm
@@ -92,7 +94,20 @@ avg = average(a,axis=0)
 
 NormedArrayOfFaces = a - avg
 
+# faces formes our Eigenspace
 faces = calculateEigenfaces(NormedArrayOfFaces)
+
+# select 6 most relevant faces
 relevantFaces = faces[:,:6]
 
-apply_along_axis(reshapeVectorToImage,axis=0,arr = relevantFaces)
+# display relevant faces
+display = zeros(shape=(height,0))
+for i in range(6):
+    display = concatenate((display,relevantFaces[:,i:i+1].reshape(height,width)), axis=1)
+plt.imshow(display,cmap = cm.Greys_r)
+
+# calculate point in Eigenspace for every image
+pointsInEigenspace = []
+for img in NormedArrayOfFaces:
+    pointsInEigenspace.append(projectImageToEigenspace(img,faces))
+    
